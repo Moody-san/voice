@@ -1,0 +1,23 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: voice_patients_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: voice
+      POSTGRES_PASSWORD: voice
+      POSTGRES_DB: voice_patients
+    ports:
+      # Host 5434 -> container 5432, to avoid clashing with system Postgres
+      # clusters already listening on 5432/5433.
+      - '5434:5432'
+    volumes:
+      - voice_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U voice -d voice_patients']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  voice_pgdata:

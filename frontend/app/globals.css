@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Modernist tokens (ported from the cover repo's .ff-app light palette).
+ * Monochrome, warm-neutral, hairline rules. Status colors only for badges.
+ */
+@layer base {
+  :root {
+    --ff-bg: #f3f2f2;
+    --ff-surface: #eae9e9;
+    --ff-card: #ffffff;
+
+    --ff-ink: #201e1d;
+    --ff-ink-2: #2d2b2b;
+
+    --ff-text: #201e1d;
+    --ff-soft: #605d5d;
+    --ff-muted: #7d7979;
+    --ff-faint: #9b9797;
+
+    --ff-line: #e0e3e8;
+    --ff-line-2: #d7d3d3;
+    --ff-rule: rgba(32, 30, 29, 0.4);
+    --ff-rule-soft: rgba(32, 30, 29, 0.18);
+
+    --ff-ok: #201e1d;
+    --ff-success: hsl(142 71% 45%);
+    --ff-success-soft: hsl(142 71% 45% / 0.14);
+    --ff-success-text: hsl(142 76% 26%);
+    --ff-warning: hsl(38 92% 50%);
+    --ff-warning-text: hsl(30 90% 30%);
+    --ff-danger: hsl(0 84% 60%);
+    --ff-danger-soft: hsl(0 84% 60% / 0.12);
+    --ff-danger-text: hsl(0 72% 42%);
+
+    --radius: 0.5rem;
+  }
+
+  html {
+    background: var(--ff-bg);
+  }
+
+  body {
+    background: var(--ff-bg);
+    color: var(--ff-text);
+    font-family: var(--font-archivo), system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+}
+
+@layer components {
+  /* Uppercase mono eyebrow label — a signature of the Modernist system. */
+  .eyebrow {
+    @apply font-mono text-[11px] uppercase tracking-[0.14em] text-muted;
+  }
+}

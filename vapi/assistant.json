@@ -1,0 +1,44 @@
+{
+  "_comment": "Reference configuration for the Vapi assistant. Primary setup is the Vapi dashboard (see README.md in this folder); this file documents the equivalent config for reproducibility / the create-assistant API. Replace the system prompt content with the full text of system-prompt.md, and set the server URLs to your ngrok domain. The x-vapi-secret header is configured on the server/tool credential in the dashboard, not stored here.",
+
+  "name": "Patient Intake - Sam",
+
+  "firstMessage": "Thanks for calling! I can get you registered as a patient. It'll just take a couple of minutes. Can I start with your first name?",
+  "firstMessageMode": "assistant-speaks-first",
+
+  "model": {
+    "provider": "openai",
+    "model": "gpt-4o",
+    "temperature": 0.4,
+    "messages": [
+      {
+        "role": "system",
+        "content": "<<< PASTE THE FULL CONTENTS OF system-prompt.md HERE >>>"
+      }
+    ],
+    "toolIds": [
+      "<<< id of the lookupPatientByPhone tool created in the dashboard >>>",
+      "<<< id of the savePatient tool created in the dashboard >>>"
+    ]
+  },
+
+  "transcriber": {
+    "provider": "deepgram",
+    "model": "nova-2",
+    "language": "en"
+  },
+
+  "voice": {
+    "provider": "vapi",
+    "voiceId": "Elliot"
+  },
+
+  "server": {
+    "url": "https://ivonne-noninterchangeable-vagariously.ngrok-free.dev/vapi/webhook"
+  },
+  "serverMessages": ["end-of-call-report", "tool-calls"],
+
+  "endCallFunctionEnabled": true,
+  "silenceTimeoutSeconds": 30,
+  "maxDurationSeconds": 600
+}

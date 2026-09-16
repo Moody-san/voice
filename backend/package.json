@@ -1,0 +1,47 @@
+{
+  "name": "voice-patient-backend",
+  "version": "0.1.0",
+  "description": "Voice AI patient-registration backend (NestJS + TypeORM + Postgres)",
+  "author": "",
+  "private": true,
+  "license": "UNLICENSED",
+  "scripts": {
+    "build": "nest build",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "start": "nest start",
+    "start:dev": "nest start --watch",
+    "start:debug": "nest start --debug --watch",
+    "start:prod": "node dist/main",
+    "seed": "ts-node scripts/seed.ts",
+    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
+    "migration:generate": "npm run typeorm -- migration:generate src/database/migrations/Migration -d src/database/data-source.ts",
+    "migration:run": "npm run typeorm -- migration:run -d src/database/data-source.ts",
+    "migration:revert": "npm run typeorm -- migration:revert -d src/database/data-source.ts"
+  },
+  "dependencies": {
+    "@nestjs/common": "^11.1.4",
+    "@nestjs/config": "^4.0.2",
+    "@nestjs/core": "^11.1.4",
+    "@nestjs/platform-express": "^11.1.4",
+    "@nestjs/swagger": "^11.2.0",
+    "@nestjs/typeorm": "^11.0.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.2",
+    "dotenv": "^17.2.0",
+    "joi": "^17.13.3",
+    "pg": "^8.13.1",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.1",
+    "typeorm": "^0.3.20"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^11.0.0",
+    "@nestjs/schematics": "^11.0.0",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.16.4",
+    "source-map-support": "^0.5.21",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.8.3"
+  }
+}
