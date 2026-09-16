@@ -6,8 +6,16 @@
 
 export interface VapiToolCall {
   id: string; // echoed back as toolCallId
-  name: string; // e.g. "savePatient"
-  arguments: Record<string, unknown>;
+  type?: string; // "function"
+  // Real Vapi payloads nest name/arguments under `function` (OpenAI shape),
+  // and `arguments` can be a JSON string. Older/flat shapes put them at the
+  // top level. Both are handled in VapiService.normalizeToolCall.
+  function?: {
+    name: string;
+    arguments: Record<string, unknown> | string;
+  };
+  name?: string;
+  arguments?: Record<string, unknown> | string;
 }
 
 export interface VapiToolCallsPayload {

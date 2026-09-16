@@ -36,18 +36,17 @@ export class VapiService {
   async handleToolCalls(toolCalls: VapiToolCall[]): Promise<VapiToolResult[]> {
     const results: VapiToolResult[] = [];
     for (const call of toolCalls) {
-      this.logger.log(
-        `Tool call ${call.name} (${call.id}): ${JSON.stringify(call.arguments)}`,
-      );
+      const { id, name, args } = this.normalizeToolCall(call);
+      this.logger.log(`Tool call ${name} (${id}): ${JSON.stringify(args)}`);
       try {
         results.push({
-          toolCallId: call.id,
-          result: await this.dispatch(call),
+          toolCallId: id,
+          result: await this.dispatch(name, args),
         });
       } catch (err) {
-        this.logger.error(`Tool ${call.name} failed`, err as Error);
+        this.logger.error(`Tool ${name} failed`, err as Error);
         results.push({
-          toolCallId: call.id,
+          toolCallId: id,
           result: {
             success: false,
             message:
@@ -59,14 +58,41 @@ export class VapiService {
     return results;
   }
 
-  private async dispatch(call: VapiToolCall): Promise<unknown> {
-    switch (call.name) {
+  /**
+   * Vapi's tool-call items follow the OpenAI shape: name/arguments live under
+   * `function`, and `arguments` may arrive as a JSON string. Older/flat shapes
+   * put them at the top level. Normalize both into { id, name, args }.
+   */
+  private normalizeToolCall(call: VapiToolCall): {
+    id: string;
+    name: string;
+    args: Record<string, unknown>;
+  } {
+    const name = call.function?.name ?? call.name ?? 'unknown';
+    let raw: unknown = call.function?.arguments ?? call.arguments ?? {};
+    if (typeof raw === 'string') {
+      try {
+        raw = JSON.parse(raw);
+      } catch {
+        raw = {};
+      }
+    }
+    const args =
+      raw && typeof raw === 'object' ? (raw as Record<string, unknown>) : {};
+    return { id: call.id, name, args };
+  }
+
+  private async dispatch(
+    name: string,
+    args: Record<string, unknown>,
+  ): Promise<unknown> {
+    switch (name) {
       case TOOL_LOOKUP:
-        return this.lookupPatientByPhone(call.arguments);
+        return this.lookupPatientByPhone(args);
       case TOOL_SAVE:
-        return this.savePatient(call.arguments);
+        return this.savePatient(args);
       default:
-        return { success: false, message: `Unknown tool: ${call.name}` };
+        return { success: false, message: `Unknown tool: ${name}` };
     }
   }
 
